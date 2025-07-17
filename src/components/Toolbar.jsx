@@ -458,14 +458,20 @@ function Toolbar({
               if (e.target.files && e.target.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                  // Add the image to the board when file is loaded
-                  addElement({
-                    type: 'image',
-                    src: event.target.result,
-                    alt: 'Uploaded tide board image',
-                    isLoading: false,
-                    error: false
-                  });
+                  const img = new Image();
+                  img.onload = () => {
+                    // Add the image with its natural dimensions
+                    addElement({
+                      type: 'image',
+                      src: event.target.result,
+                      alt: 'Uploaded tide board image',
+                      width: img.naturalWidth,
+                      height: img.naturalHeight,
+                      isLoading: false,
+                      error: false
+                    });
+                  };
+                  img.src = event.target.result;
                 };
                 reader.readAsDataURL(e.target.files[0]);
                 // Reset the file input
